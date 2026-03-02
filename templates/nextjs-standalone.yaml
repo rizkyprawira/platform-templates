@@ -60,9 +60,9 @@ spec:
             lifecycle: experimental
             owner: ${{ parameters.owner }}
 
-output:
-    links:
-      - title: View new repo
-        url: https://github.com/rizkyprawira/${{ parameters.name }}
-      - title: View in catalog
-        url: /catalog/default/component/${{ parameters.name }}
+  output:
+      links:
+        - title: View new repo
+          url: https://github.com/rizkyprawira/${{ parameters.name }}
+        - title: View in catalog
+          url: /catalog/default/component/${{ parameters.name }}
