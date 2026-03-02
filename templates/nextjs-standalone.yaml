@@ -28,6 +28,17 @@ spec:
           ui:autofocus: true
           ui:options:
             rows: 5
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
     - owner:
         title: Owner
         description: The owner of the Next.js application
@@ -44,18 +55,18 @@ spec:
           description: ${{ parameters.description }}
     
     - id: publish-repo
-      name: Create new GitHub repo
+      name: Publish
       action: publish:github
       input:
-        description: ${{ parameters.description }}
-        repoUrl: github.com/rizkyprawira/${{ parameters.name }}
-        defaultBranch: main
+        description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        defaultBranch: 'main'
 
     - id: add-catalog-info
       name: Add catalog-info.yaml
       action: publish:github
       input:
-        repoUrl: github.com/rizkyprawira/${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
         branch: main
         path: catalog-info.yaml
         # Use templated content here (Backstage renders variables)
@@ -66,7 +77,7 @@ spec:
             name: ${{ parameters.name }}
             description: ${{ parameters.description }}
             annotations:
-              github.com/project-slug: rizkyprawira/${{ parameters.name }}
+              github.com/project-slug: ${{ parameters.repoUrl }}
           spec:
             type: website
             lifecycle: experimental
@@ -75,6 +86,6 @@ spec:
   output:
       links:
         - title: View new repo
-          url: https://github.com/rizkyprawira/${{ parameters.name }}
+          url: ${{ parameters.repoUrl }}
         - title: View in catalog
           url: /catalog/default/component/${{ parameters.name }}
