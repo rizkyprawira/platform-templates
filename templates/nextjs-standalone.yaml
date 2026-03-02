@@ -1,0 +1,68 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: nextjs-standalone
+  title: Next.js Standalone
+  description: A Next.js application without database
+spec:
+  owner: platform-team
+  type: service
+  parameters:
+    - title: App Name
+      description: The name of the Next.js application
+      type: string
+      ui:autofocus: true
+    - title: Short Description
+      description: A short description of the Next.js application
+      type: string
+    - owner:
+        title: Owner
+        description: The owner of the Next.js application
+        type: string
+
+  steps:
+    - id: fetch-base
+      name: Fetch base from myweb
+      action: fetch:template
+      input:
+        url: https://github.com/rizkyprawira/myweb
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+    
+    - id: publish-repo
+      name: Create new GitHub repo
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: ${{ parameters.description }}
+        repoUrl: github.com/rizkyprawira/${{ parameters.name }}
+        defaultBranch: main
+
+    - id: add-catalog-info
+      name: Add catalog-info.yaml
+      action: publish:github
+      input:
+        repoUrl: github.com/rizkyprawira/${{ parameters.name }}
+        branch: main
+        path: catalog-info.yaml
+        # Use templated content here (Backstage renders variables)
+        content: |
+          apiVersion: backstage.io/v1alpha1
+          kind: Component
+          metadata:
+            name: ${{ parameters.name }}
+            description: ${{ parameters.description }}
+            annotations:
+              github.com/project-slug: rizkyprawira/${{ parameters.name }}
+          spec:
+            type: website
+            lifecycle: experimental
+            owner: ${{ parameters.owner }}
+
+output:
+    links:
+      - title: View new repo
+        url: https://github.com/rizkyprawira/${{ parameters.name }}
+      - title: View in catalog
+        url: /catalog/default/component/${{ parameters.name }}
