@@ -2,6 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: nextjs-standalone
+  title: Next.js Standalone
   description: A Next.js application without database
 spec:
   owner: platform-team
@@ -46,7 +47,6 @@ spec:
       name: Create new GitHub repo
       action: publish:github
       input:
-        allowedHosts: ['github.com']
         description: ${{ parameters.description }}
         repoUrl: github.com/rizkyprawira/${{ parameters.name }}
         defaultBranch: main
