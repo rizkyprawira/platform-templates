@@ -2,18 +2,31 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: nextjs-standalone
-  title: Next.js Standalone
   description: A Next.js application without database
 spec:
   owner: platform-team
   type: service
   parameters:
-    - title: App Name
-      description: The name of the Next.js application
-      type: string
+    - title: Fill app name
+      required:
+        - name
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:autofocus: true
     - title: Short Description
-      description: A short description of the Next.js application
-      type: string
+      required:
+        - description
+      properties:
+        description:
+          title: Description
+          type: string
+          description: A short description of the component
+          ui:autofocus: true
+          ui:options:
+            rows: 5
     - owner:
         title: Owner
         description: The owner of the Next.js application
